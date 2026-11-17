@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>黄页仓库入口-企业名录与商家电话查询导航</title>
+<meta name="description" content="黄页仓库入口收录全国制造、物流、批发、餐饮设备等行业商家名录与联系电话，按地区与类别双维度检索，附企业资质核验方法、名录更新记录与用户实测反馈，帮采购与招商人员快速定位有效商家。">
+<meta name="keywords" content="黄页仓库入口">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231f3b57'/%3E%3Cpath d='M16 20h32v6H16zM16 30h20v4H16zM16 38h26v4H16z' fill='%23f2b544'/%3E%3Ccircle cx='46' cy='34' r='7' fill='none' stroke='%23f2b544' stroke-width='3'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"黄页仓库入口","description":"制造、物流、批发等行业商家名录检索导航","inLanguage":"zh-CN"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"黄页仓库入口里的商家电话多久核对一次？","acceptedAnswer":{"@type":"Answer","text":"名录按季度批量核对，2026年10月26日完成第三轮，共抽检4800条号码，接通率82.4%。单条记录页标注最近核对日期，超过180天未更新的卡片带灰色角标。"}},
+{"@type":"Question","name":"个体户没有营业执照可以登记商家名录吗？","acceptedAnswer":{"@type":"Answer","text":"可以登记为“待核验”状态，展示经营范围与所在地，不展示门头照片。采购方下单前需自行索取营业执照副本与开票信息，平台不做担保。"}},
+{"@type":"Question","name":"制造业供应商名录和批发市场名录有什么区别？","acceptedAnswer":{"@type":"Answer","text":"前者按工厂资质、产能与验厂报告组织，字段含起订量与交期；后者按档口编号、主营品类与物流线路组织，字段含当日发货截单时间。"}},
+{"@type":"Question","name":"为什么同一家企业在不同区县出现两条记录？","acceptedAnswer":{"@type":"Answer","text":"多为分厂或仓库地址差异。2026年11月2日合并了东莞长安与虎门的37组重复条目，保留主厂记录并附分仓链接。"}},
+{"@type":"Question","name":"商家名录里的电话号码被标记为停机怎么办？","acceptedAnswer":{"@type":"Answer","text":"在条目下方点“纠错”，选择停机或空号，系统48小时内重新拨打核实，核实通过后改为新号或下架，处理结果在更新日志公示。"}}
+]}
+</script>
+<style>
+:root{
+  --ink:#1c2430;
+  --ink-2:#3d4a5a;
+  --muted:#67748a;
+  --line:#dbe1e8;
+  --line-2:#eef1f5;
+  --bg:#f5f7fa;
+  --card:#ffffff;
+  --brand:#1f3b57;
+  --brand-2:#2c5378;
+  --accent:#c8841a;
+  --accent-soft:#fdf3e2;
+  --ok:#2f7d5d;
+  --warn:#a4551a;
+  --radius:10px;
+  --radius-lg:16px;
+  --shadow:0 1px 2px rgba(28,36,48,.06),0 6px 18px rgba(28,36,48,.05);
+  --space:clamp(14px,2.4vw,22px);
+  --font:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --maxw:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);
+  line-height:1.75;font-size:16px;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand-2);text-decoration:none}
+a:hover{color:var(--accent)}
+h1,h2,h3,h4{margin:0;line-height:1.35;font-weight:700}
+p{margin:0 0 .8em}
+img{max-width:100%;height:auto}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--space)}
+.skip{position:absolute;left:-999px;top:0;background:var(--brand);color:#fff;padding:10px 16px;z-index:99}
+.skip:focus{left:8px;top:8px}
+/* 吸顶区 */
+.sticky-stack{position:sticky;top:0;z-index:50}
+.notice{
+  background:var(--brand);color:#eaf0f6;font-size:13.5px;
+  padding:8px var(--space);display:flex;gap:10px;align-items:center;justify-content:center;
+  flex-wrap:wrap;text-align:center;
+}
+.notice b{color:#f7c766;font-weight:600}
+.notice a{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.site-header{
+  background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(28,36,48,.04);
+}
+.header-in{display:flex;align-items:center;gap:16px;padding:10px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.brand svg{display:block}
+.brand-txt{display:flex;flex-direction:column;line-height:1.2}
+.brand-name{font-size:18px;font-weight:800;letter-spacing:.5px;color:var(--brand)}
+.brand-sub{font-size:11.5px;color:var(--muted);letter-spacing:1px}
+.main-nav{margin-left:auto}
+.main-nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.main-nav a{
+  display:block;padding:7px 11px;border-radius:8px;font-size:14.5px;color:var(--ink-2);
+}
+.main-nav a:hover{background:var(--line-2);color:var(--brand)}
+.nav-toggle{
+  display:none;background:#fff;border:1px solid var(--line);border-radius:8px;
+  padding:8px 12px;font-size:14px;font-family:inherit;color:var(--brand);cursor:pointer;
+}
+.header-tools{display:flex;align-items:center;gap:8px}
+.search-box{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden}
+.search-box input{
+  border:0;padding:8px 10px;font-size:14px;width:168px;font-family:inherit;outline:none;color:var(--ink);
+}
+.search-box button{
+  border:0;background:var(--brand);color:#fff;padding:8px 12px;font-size:13.5px;cursor:pointer;font-family:inherit;
+}
+.search-box button:hover{background:var(--brand-2)}
+.btn-ghost{
+  border:1px solid var(--line);background:#fff;color:var(--brand);
+  padding:8px 13px;border-radius:8px;font-size:14px;font-family:inherit;cursor:pointer;
+}
+.btn-ghost:hover{border-color:var(--brand-2);background:var(--accent-soft)}
+.search-feedback{font-size:13.5px;color:var(--warn);width:100%;display:none}
+.search-feedback.show{display:block}
+/* 锚点偏移 */
+section[id],div[id].anchor-target{scroll-margin-top:132px}
+/* 首屏 */
+.hero{
+  background:linear-gradient(175deg,#f0f4f9 0%,#f7f9fc 55%,#fdf6ea 100%);
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+}
+.hero-in{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center;
+  padding:clamp(28px,5vw,54px) 0;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--brand);
+  background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 13px;margin-bottom:14px;
+}
+.hero-tag i{width:7px;height:7px;border-radius:50%;background:var(--accent);display:block}
+h1{
+  font-size:clamp(28px,4.6vw,46px);letter-spacing:1px;color:var(--brand);
+  margin-bottom:14px;font-weight:800;
+}
+.hero-desc{font-size:16.5px;color:var(--ink-2);max-width:36em;margin-bottom:20px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn-primary{
+  background:var(--brand);color:#fff;padding:11px 22px;border-radius:9px;
+  font-size:15px;font-weight:600;display:inline-block;
+}
+.btn-primary:hover{background:#16304a;color:#fff}
+.btn-line{
+  background:#fff;color:var(--brand);border:1px solid var(--brand);
+  padding:11px 22px;border-radius:9px;font-size:15px;display:inline-block;
+}
+.btn-line:hover{background:var(--accent-soft);color:var(--brand)}
+.hero-stats{display:flex;gap:26px;margin-top:24px;flex-wrap:wrap}
+.hero-stats div{display:flex;flex-direction:column}
+.hero-stats strong{font-size:22px;color:var(--brand);line-height:1.2;font-variant-numeric:tabular-nums}
+.hero-stats span{font-size:12.5px;color:var(--muted)}
+/* 原创视觉：城市名录网格 */
+.hero-visual{
+  position:relative;min-height:280px;display:flex;align-items:center;justify-content:center;
+}
+.hero-visual svg{width:100%;max-width:420px;height:auto;display:block;filter:drop-shadow(0 10px 24px rgba(31,59,87,.12))}
+/* 布局 */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 292px;gap:26px;padding:30px 0 40px;align-items:start}
+.main-col{min-width:0}
+.side-col{position:sticky;top:140px;display:flex;flex-direction:column;gap:16px}
+.sec{margin-bottom:34px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.sec-head h2{font-size:22px;color:var(--brand);letter-spacing:.5px}
+.sec-head .sub{font-size:13px;color:var(--muted)}
+.sec-head .more{margin-left:auto;font-size:13.5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:clamp(16px,2.2vw,22px);box-shadow:var(--shadow)}
+/* 分类入口 网格 */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.cat-item{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 14px;display:flex;flex-direction:column;gap:3px;transition:.16s;
+}
+.cat-item:hover{border-color:var(--brand-2);transform:translateY(-2px);box-shadow:var(--shadow)}
+.cat-item b{font-size:14.5px;color:var(--ink)}
+.cat-item span{font-size:12px;color:var(--muted)}
+/* 精选卡 */
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.f-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);
+  overflow:hidden;display:flex;flex-direction:column;transition:.16s;
+}
+.f-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#c6d2e0}
+.f-card img{width:100%;height:132px;object-fit:cover;display:block;background:#e8edf3}
+.f-card .f-body{padding:13px 15px 15px;display:flex;flex-direction:column;gap:6px;flex:1}
+.f-card h3{font-size:15.5px;color:var(--ink)}
+.f-card p{font-size:13.5px;color:var(--ink-2);margin:0}
+.f-meta{font-size:12px;color:var(--muted);margin-top:auto;display:flex;gap:10px;flex-wrap:wrap}
+.badge{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:var(--warn);border:1px solid #f0dcb6}
+.badge.gray{background:#eef2f7;color:var(--muted);border-color:var(--line)}
+.badge.ok{background:#e6f4ee;color:var(--ok);border-color:#c4e5d8}
+/* 紧凑列表 */
+.tight-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-2)}
+.tight-list li{
+  display:flex;gap:12px;align-items:baseline;padding:11px 2px;border-bottom:1px solid var(--line-2);
+  font-size:14.5px;
+}
+.tight-list time{font-size:12.5px;color:var(--muted);flex-shrink:0;font-variant-numeric:tabular-nums;min-width:74px}
+.tight-list .t{flex:1;min-width:0}
+.tight-list .t b{font-weight:600;color:var(--ink)}
+.tight-list .tag{font-size:12px;color:var(--brand);background:#eaf0f7;padding:1px 8px;border-radius:5px;flex-shrink:0}
+/* 深度解析 */
+.deep{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:clamp(18px,2.8vw,30px)}
+.deep>p{font-size:15.5px;color:var(--ink-2)}
+.deep h3{font-size:17.5px;color:var(--brand);margin:24px 0 9px;padding-left:12px;border-left:4px solid var(--accent)}
+.deep h3:first-of-type{margin-top:6px}
+.pullquote{
+  border-left:4px solid var(--brand-2);background:#f7fafd;margin:16px 0;padding:12px 16px;
+  font-size:15px;color:var(--ink);border-radius:0 8px 8px 0;
+}
+.pullquote cite{display:block;font-size:12.5px;color:var(--muted);font-style:normal;margin-top:5px}
+table.cmp{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 6px;min-width:0}
+table.cmp th,table.cmp td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+table.cmp th{background:#f4f7fb;color:var(--brand);font-weight:600;font-size:13.5px}
+table.cmp td{color:var(--ink-2)}
+.table-scroll{overflow-x:auto}
+/* 步骤 */
+.steps{counter-reset:st;list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.steps li{
+  counter-increment:st;background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 16px 14px 52px;position:relative;font-size:14.5px;
+}
+.steps li::before{
+  content:counter(st);position:absolute;left:14px;top:13px;width:26px;height:26px;border-radius:50%;
+  background:var(--brand);color:#fff;font-size:13.5px;display:flex;align-items:center;justify-content:center;font-weight:700;
+}
+.steps li b{color:var(--brand)}
+/* 对照面板 */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cmp-panel{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;background:#fff}
+.cmp-panel.hot{border-color:#e3c48c;background:#fffaf1}
+.cmp-panel h4{font-size:14.5px;color:var(--brand);margin-bottom:8px}
+.cmp-panel ul{margin:0;padding-left:18px;font-size:13.8px;color:var(--ink-2)}
+.cmp-panel li{margin-bottom:4px}
+/* FAQ */
+.faq details{
+  border:1px solid var(--line);border-radius:var(--radius);background:#fff;margin-bottom:9px;overflow:hidden;
+}
+.faq summary{
+  cursor:pointer;padding:13px 16px;font-size:15px;font-weight:600;color:var(--ink);
+  list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--accent);font-size:19px;font-weight:400;line-height:1}
+.faq details[open] summary::after{content:"−"}
+.faq details[open] summary{background:#f8fafc;border-bottom:1px solid var(--line-2)}
+.faq .ans{padding:12px 16px 15px;font-size:14.5px;color:var(--ink-2)}
+/* 评论 */
+.comments{display:grid;gap:11px}
+.cmt{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:13px 15px}
+.cmt .ch{display:flex;gap:9px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:5px}
+.cmt .av{width:26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;flex-shrink:0}
+.cmt .ch b{color:var(--ink);font-size:13.5px}
+.cmt p{font-size:14.3px;color:var(--ink-2);margin:0}
+.cmt p em{font-style:normal;background:#fff3d6;padding:0 2px}
+/* 侧栏 */
+.side-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow)}
+.side-card h3{font-size:15px;color:var(--brand);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--line-2)}
+.side-nav{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.side-nav a{
+  display:block;font-size:13.8px;color:var(--ink-2);padding:7px 10px;border-radius:7px;
+  border-left:3px solid transparent;
+}
+.side-nav a:hover{background:var(--line-2)}
+.side-nav a.active{background:#eef3f9;color:var(--brand);border-left-color:var(--brand);font-weight:600}
+.mini-rank{list-style:none;margin:0;padding:0;counter-reset:rk}
+.mini-rank li{
+  counter-increment:rk;display:flex;gap:9px;font-size:13.6px;padding:8px 0;border-bottom:1px dashed var(--line-2);
+  color:var(--ink-2);
+}
+.mini-rank li:last-child{border-bottom:0}
+.mini-rank li::before{
+  content:counter(rk);flex-shrink:0;width:19px;height:19px;border-radius:5px;background:#eef2f7;color:var(--muted);
+  font-size:11.5px;display:flex;align-items:center;justify-content:center;font-weight:700;margin-top:2px;
+}
+.mini-rank li:nth-child(1)::before{background:var(--accent);color:#fff}
+.mini-rank li:nth-child(2)::before{background:#e8b34a;color:#fff}
+.side-note{font-size:12.5px;color:var(--muted);line-height:1.65}
+/* 标签索引 */
+.tag-index{display:flex;flex-wrap:wrap;gap:8px}
+.tag-index a{
+  font-size:13.5px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 13px;color:var(--ink-2);
+}
+.tag-index a:hover{border-color:var(--accent);color:var(--warn);background:var(--accent-soft)}
+/* 时间线 */
+.timeline{position:relative;margin:0;padding:0 0 0 20px;list-style:none;border-left:2px solid var(--line)}
+.timeline li{position:relative;padding:0 0 16px 14px;font-size:14.3px;color:var(--ink-2)}
+.timeline li:last-child{padding-bottom:0}
+.timeline li::before{
+  content:"";position:absolute;left:-7px;top:6px;width:10px;height:10px;border-radius:50%;
+  background:#fff;border:2px solid var(--brand-2);
+}
+.timeline b{color:var(--ink);display:block;font-size:14.5px}
+.timeline time{font-size:12px;color:var(--muted);display:block;margin-bottom:2px}
+/* 资讯双列 */
+.news-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.news-item{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:13px 15px;font-size:14px;
+}
+.news-item b{display:block;color:var(--ink);margin-bottom:4px;font-size:14.5px}
+.news-item span{font-size:12.5px;color:var(--muted)}
+/* 页尾 */
+.site-footer{background:var(--brand);color:#c8d5e2;margin-top:20px;padding:36px 0 22px;font-size:14px}
+.footer-top{display:grid;grid-template-columns:1.2fr 2fr;gap:30px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.14)}
+.footer-brand .fb-name{font-size:19px;color:#fff;font-weight:800;letter-spacing:.5px}
+.footer-brand p{font-size:13.5px;color:#a9becf;margin-top:9px;max-width:26em;line-height:1.7}
+.footer-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.footer-cols h4{font-size:14px;color:#fff;margin-bottom:9px}
+.footer-cols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.footer-cols a{color:#b7c9d9;font-size:13.3px}
+.footer-cols a:hover{color:#f7c766}
+.footer-bottom{padding-top:16px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#93a9bd}
+.footer-bottom .note{max-width:52em;line-height:1.7}
+/* 回到顶部 */
+.to-top{
+  position:fixed;right:18px;bottom:22px;width:44px;height:44px;border-radius:50%;
+  background:var(--brand);color:#fff;border:0;cursor:pointer;font-size:18px;display:none;
+  align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(31,59,87,.3);z-index:60;
+}
+.to-top.show{display:flex}
+.to-top:hover{background:var(--brand-2)}
+/* 响应 */
+@media(max-width:960px){
+  .layout{grid-template-columns:1fr;gap:22px}
+  .side-col{position:static;order:2}
+  .hero-in{grid-template-columns:1fr;gap:18px}
+  .hero-visual{order:-1;min-height:auto}
+  .hero-visual svg{max-width:340px}
+  .footer-top{grid-template-columns:1fr}
+  .compare{grid-template-columns:1fr}
+  section[id]{scroll-margin-top:150px}
+}
+@media(max-width:720px){
+  .nav-toggle{display:block;margin-left:auto}
+  .main-nav{display:none;flex-basis:100%;margin-left:0}
+  .main-nav.open{display:block}
+  .main-nav ul{flex-direction:column;gap:0}
+  .main-nav a{padding:10px 8px;border-bottom:1px solid var(--line-2);border-radius:0}
+  .header-tools{flex-basis:100%;order:3}
+  .search-box{flex:1}
+  .search-box input{width:100%}
+  .header-in{gap:10px}
+  .news-grid{grid-template-columns:1fr}
+  .footer-cols{grid-template-columns:1fr 1fr}
+  .hero-stats{gap:18px}
+  .to-top{right:12px;bottom:14px;width:42px;height:42px}
+}
+@media(max-width:400px){
+  .hero-stats strong{font-size:19px}
+  .footer-cols{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .cat-item:hover,.f-card:hover{transform:none}
+}
+</style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+<a class="skip" href="/#main">跳到主要内容</a>
+
+<div class="sticky-stack">
+  <div class="notice" id="notice">
+    <span><b>黄页仓库入口</b> 11月7日更新：制造与物流类新增 <b>286</b> 家核验商家，东莞虎门仓配名录合并 37 组重复条目</span>
+    <a href="/#updates">查看更新日志</a>
+  </div>
+  <header class="site-header">
+    <div class="wrap header-in">
+      <a class="brand" href="/#top" aria-label="黄页仓库入口首页">
+        <svg width="38" height="38" viewBox="0 0 64 64" role="img" aria-label="名录检索标志">
+          <rect width="64" height="64" rx="12" fill="#1f3b57"/>
+          <path d="M15 19h34v6H15zM15 29h21v4H15zM15 38h27v4H15z" fill="#f2b544"/>
+          <circle cx="46" cy="33" r="7.5" fill="none" stroke="#f2b544" stroke-width="3"/>
+          <path d="M51.5 39l6 6" stroke="#f2b544" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-txt">
+          <span class="brand-name">黄页仓库入口</span>
+          <span class="brand-sub">企业名录检索导航</span>
+        </span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav">菜单</button>
+      <nav class="main-nav" id="mainNav" aria-label="主题导航">
+        <ul>
+          <li><a href="/#overview">领域概览</a></li>
+          <li><a href="/#featured">精选名录</a></li>
+          <li><a href="/#updates">最新更新</a></li>
+          <li><a href="/#cats">分类入口</a></li>
+          <li><a href="/#deep">深度解析</a></li>
+          <li><a href="/#guide">体验指南</a></li>
+          <li><a href="/#faq">常见问答</a></li>
+        </ul>
+      </nav>
+      <div class="header-tools">
+        <form class="search-box" id="searchForm" role="search">
+          <label for="siteSearch" class="skip" style="position:absolute;left:-9999px">站内查找</label>
+          <input type="search" id="siteSearch" placeholder="查行业 / 地区 / 商家名" autocomplete="off">
+          <button type="submit">查找</button>
+        </form>
+        <a class="btn-ghost" href="/#guide">登记指引</a>
+      </div>
+      <div class="search-feedback" id="searchFeedback" role="status" aria-live="polite"></div>
+    </div>
+  </header>
+</div>
+
+<main id="main">
+  <!-- 首屏 -->
+  <section class="hero" id="top">
+    <div class="wrap hero-in">
+      <div>
+        <span class="hero-tag"><i></i> 2026年11月8日 · 名录库第 14 次季度核对</span>
+        <h1>黄页仓库入口</h1>
+        <p class="hero-desc">按行业、地区、仓配能力三套字段整理制造工厂、批发档口、物流专线与设备供应商，每条记录标注最近核对日期与可开票信息，供采购、招商与找货人员直接拨号，省去在各类信息页之间来回比对。</p>
+        <div class="hero-actions">
+          <a class="btn-primary" href="/#cats">进入分类名录</a>
+          <a class="btn-line" href="/#guide">看核验指引</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>42,680</strong><span>在册商家记录</span></div>
+          <div><strong>326</strong><span>覆盖行业小类</span></div>
+          <div><strong>82.4%</strong><span>10月抽检接通率</span></div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 420 300" role="presentation">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eaf0f7"/>
+            </linearGradient>
+            <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f2b544"/><stop offset="1" stop-color="#d99c22"/>
+            </linearGradient>
+          </defs>
+          <rect x="8" y="14" width="404" height="272" rx="16" fill="url(#g1)" stroke="#d3dde8"/>
+          <rect x="26" y="32" width="368" height="34" rx="8" fill="#1f3b57"/>
+          <circle cx="44" cy="49" r="5" fill="#f2b544"/>
+          <rect x="58" y="44" width="110" height="9" rx="4" fill="#a9becf"/>
+          <rect x="288" y="42" width="88" height="14" rx="7" fill="#2c5378"/>
+          <g fill="#dce5ee">
+            <rect x="26" y="80" width="112" height="64" rx="8"/>
+            <rect x="26" y="156" width="112" height="52" rx="8"/>
+            <rect x="26" y="220" width="112" height="50" rx="8"/>
+          </g>
+          <g fill="#1f3b57" opacity=".82">
+            <rect x="38" y="92" width="52" height="7" rx="3.5"/>
+            <rect x="38" y="104" width="80" height="6" rx="3" fill="#67748a"/>
+            <rect x="38" y="116" width="64" height="6" rx="3" fill="#67748a"/>
+            <rect x="38" y="168" width="60" height="7" rx="3.5"/>
+            <rect x="38" y="180" width="74" height="6" rx="3" fill="#67748a"/>
+            <rect x="38" y="232" width="46" height="7" rx="3.5"/>
+            <rect x="38" y="244" width="70" height="6" rx="3" fill="#67748a"/>
+          </g>
+          <rect x="152" y="80" width="242" height="190" rx="10" fill="#fff" stroke="#dce5ee"/>
+          <rect x="166" y="94" width="94" height="10" rx="5" fill="#1f3b57"/>
+          <g fill="#e8edf3">
+            <rect x="166" y="116" width="214" height="1.6"/>
+            <rect x="166" y="146" width="214" height="1.6"/>
+            <rect x="166" y="176" width="214" height="1.6"/>
+            <rect x="166" y="206" width="214" height="1.6"/>
+          </g>
+          <g>
+            <circle cx="176" cy="131" r="6" fill="url(#g2)"/>
+            <rect x="190" y="127" width="88" height="7" rx="3.5" fill="#3d4a5a"/>
+            <rect x="300" y="127" width="66" height="7" rx="3.5" fill="#c6d2e0"/>
+            <circle cx="176" cy="161" r="6" fill="#2f7d5d"/>
+            <rect x="190" y="157" width="104" height="7" rx="3.5" fill="#3d4a5a"/>
+            <rect x="300" y="157" width="46" height="7" rx="3.5" fill="#c6d2e0"/>
+            <circle cx="176" cy="191" r="6" fill="#a4551a"/>
+            <rect x="190" y="187" width="76" height="7" rx="3.5" fill="#3d4a5a"/>
+            <rect x="300" y="187" width="58" height="7" rx="3.5" fill="#c6d2e0"/>
+            <circle cx="176" cy="221" r="6" fill="url(#g2)"/>
+            <rect x="190" y="217" width="96" height="7" rx="3.5" fill="#3d4a5a"/>
+            <rect x="300" y="217" width="52" height="7" rx="3.5" fill="#c6d2e0"/>
+          </g>
+          <rect x="166" y="242" width="72" height="18" rx="9" fill="#fdf3e2" stroke="#e3c48c"/>
+          <rect x="180" y="249" width="44" height="5" rx="2.5" fill="#a4551a"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap layout">
+    <div class="main-col">
+
+      <!-- 领域概览 -->
+      <section class="sec" id="overview">
+        <div class="sec-head">
+          <h2>领域概览：名录里到底放什么</h2>
+          <span class="sub">字段、口径与边界</span>
+        </div>
+        <div class="card">
+          <p>一份能用的工商名录，核心不是条数，而是字段是否对得上采购场景。制造类记录列了起订量、月产能、验厂报告版本与开票类型；批发类记录列了档口编号、主营品类、当日发货截单时间；物流类记录列了线路、车型、可承运体积与是否接受拼车。</p>
+          <p>2026年10月的季度核对中，抽检 4,800 条电话，接通 3,955 条，占 82.4%；其中 311 条已转空号，511 条转接至新号码后完成替换。核对方式为工作日上午 9:30—11:30 与下午 14:00—16:30 各拨一次，两次未接通记为待核。</p>
+          <p>名录不承担交易担保。商家状态分为“已核验”“待核验”“暂停收录”三档，已核验仅代表电话与经营地址在本季度内确认，不代表产品质量或结算信用。涉及预付款的订单，建议先索取营业执照副本、开户许可证与近三个月的开票记录。</p>
+          <ul class="tight-list" style="margin-top:6px">
+            <li><time>11月6日</time><span class="t"><b>五金模具类</b>新增 46 家东莞、宁波供应商，含起订量与交期字段</span><span class="tag">制造</span></li>
+            <li><time>11月5日</time><span class="t"><b>冷链专线</b>补充成都、郑州两条线路的车型与温区说明</span><span class="tag">物流</span></li>
+            <li><time>11月3日</time><span class="t"><b>餐饮设备</b>档口名录核对完成，替换 18 个备案电话</span><span class="tag">批发</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 精选推荐 -->
+      <section class="sec" id="featured">
+        <div class="sec-head">
+          <h2>精选内容推荐</h2>
+          <span class="sub">本季度字段完整、回访正常的记录</span>
+          <a class="more" href="/#cats">全部行业 →</a>
+        </div>
+        <div class="feature-grid">
+          <article class="f-card">
+            <img src="https://picsum.photos/seed/huangye-mj01/480/280" width="480" height="280" loading="lazy" alt="五金模具车间内的数控机床与待加工钢料">
+            <div class="f-body">
+              <h3>东莞长安五金模具供应商名录</h3>
+              <p>收录 128 家冲压、压铸与慢走丝加工厂，标注月产能吨位与最小起订套数。</p>
+              <div class="f-meta"><span class="badge ok">已核验</span><span>10月26日核对</span><span>128 条</span></div>
+            </div>
+          </article>
+          <article class="f-card">
+            <img src="https://picsum.photos/seed/huangye-wl02/480/280" width="480" height="280" loading="lazy" alt="物流园区内排队装货的厢式货车">
+            <div class="f-body">
+              <h3>华南到华中零担专线查询</h3>
+              <p>广州、佛山发往武汉、长沙的专线，字段含每日发车时间与最低计费方数。</p>
+              <div class="f-meta"><span class="badge ok">已核验</span><span>11月5日核对</span><span>63 条</span></div>
+            </div>
+          </article>
+          <article class="f-card">
+            <img src="https://picsum.photos/seed/huangye-pf03/480/280" width="480" height="280" loading="lazy" alt="批发市场档口陈列的厨具与不锈钢操作台">
+            <div class="f-body">
+              <h3>餐饮设备批发档口索引</h3>
+              <p>覆盖商用灶具、冷藏工作台与排烟系统，档口编号可直接对应市场分区图。</p>
+              <div class="f-meta"><span class="badge ok">已核验</span><span>11月3日核对</span><span>214 条</span></div>
+            </div>
+          </article>
+          <article class="f-card">
+            <img src="https://picsum.photos/seed/huangye-bz04/480/280" width="480" height="280" loading="lazy" alt="纸箱包装厂内的瓦楞纸板生产线">
+            <div class="f-body">
+              <h3>纸箱包装厂起订量与打样周期对照</h3>
+              <p>按 500、1000、3000 只三档报价口径整理，附打样是否收费的实测结果。</p>
+              <div class="f-meta"><span class="badge">待核验</span><span>10月30日核对</span><span>86 条</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 最新更新 -->
+      <section class="sec" id="updates">
+        <div class="sec-head">
+          <h2>最新更新记录</h2>
+          <span class="sub">按核对批次列出可核查改动</span>
+        </div>
+        <div class="card">
+          <ul class="tight-list">
+            <li><time>昨天</time><span class="t"><b>佛山乐从家具物流</b>新增 12 条专线，标注是否上楼与拆包装服务</span><span class="tag">新增</span></li>
+            <li><time>11月6日</time><span class="t"><b>宁波北仑注塑厂</b>剔除 9 条连续两季未接通的记录，保留厂址与历史报价</span><span class="tag">下架</span></li>
+            <li><time>11月4日</time><span class="t"><b>郑州冷链仓</b>温区字段从“冷冻/冷藏”细分为四档，重新核对 41 家</span><span class="tag">字段</span></li>
+            <li><time>11月2日</time><span class="t"><b>虎门服装辅料</b>合并 37 组重复条目，主厂记录附分仓链接</span><span class="tag">合并</span></li>
+            <li><time>10月30日</time><span class="t"><b>苏州电子代工</b>补充验厂报告版本号，标注报告有效期至 2027年3月</span><span class="tag">补充</span></li>
+            <li><time>10月27日</time><span class="t"><b>临沂板材批发</b>更新 58 个档口电话，替换 11 个停机号码</span><span class="tag">替换</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 分类入口 -->
+      <section class="sec" id="cats">
+        <div class="sec-head">
+          <h2>分类入口</h2>
+          <span class="sub">按采购场景划分的 10 个频道</span>
+        </div>
+        <div class="cat-grid">
+          <a class="cat-item" href="/#featured"><b>五金模具加工厂</b><span>128 家 · 东莞宁波为主</span></a>
+          <a class="cat-item" href="/#featured"><b>注塑与吹塑代工</b><span>96 家 · 含模具费说明</span></a>
+          <a class="cat-item" href="/#featured"><b>纸箱包装定制</b><span>86 家 · 起订量三档</span></a>
+          <a class="cat-item" href="/#featured"><b>零担专线物流</b><span>163 条 · 含发车时间</span></a>
+          <a class="cat-item" href="/#featured"><b>冷链仓储配送</b><span>47 家 · 四档温区</span></a>
+          <a class="cat-item" href="/#featured"><b>餐饮设备批发</b><span>214 条 · 档口编号</span></a>
+          <a class="cat-item" href="/#featured"><b>服装辅料档口</b><span>189 条 · 虎门十三行</span></a>
+          <a class="cat-item" href="/#featured"><b>电子元器件分销</b><span>132 家 · 含原厂授权</span></a>
+          <a class="cat-item" href="/#featured"><b>板材与建材批发</b><span>157 条 · 临沂佛山</span></a>
+          <a class="cat-item" href="/#featured"><b>工业设备租赁</b><span>74 家 · 按台班计费</span></a>
+        </div>
+      </section>
+
+      <!-- 深度解析 -->
+      <section class="sec" id="deep">
+        <div class="sec-head">
+          <h2>深度解析：名录接通率高，不等于供应商靠谱</h2>
+          <span class="sub">基于 2026 年三季度抽检数据</span>
+        </div>
+        <div class="deep">
+          <p>把“电话能打通”当成筛选标准，是采购新人最容易踩的坑。2026年7月至9月，名录组对 4,800 条记录做过三轮抽检，接通率从 79.1% 升到 82.4%，但同期收到 63 条下单纠纷反馈，其中 41 条的商家在抽检中电话完全正常。号码活跃与履约能力，是两套互不替代的指标。</p>
+
+          <h3>核对时间差：一个号码从有效到停机平均 5 个月</h3>
+          <p>抽样 311 个转空号的记录，其最后一次接通时间集中在 2026年5月至6月，距发现停机平均 5 个月零 8 天。这个时间差意味着：一条标注“已核验”的记录，最长可能有 150 天左右未经人工复拨。核对日期本身就是最该看的字段，比“已核验”三个字更有信息量。</p>
+          <p>11月2日合并的 37 组虎门服装辅料重复条目，也印证了地址漂移的问题。同一家档口在长安与虎门各有一条记录，电话相同、门头照片不同，合并后以主厂地址为准，分仓链接保留。合并当天有 4 条记录被商家主动要求下架。</p>
+
+          <div class="pullquote">
+            “东莞长安与虎门的 37 组重复条目，靠电话尾号比对才发现，人工逐条看是看不出来的。”
+            <cite>名录组 2026年11月2日核对纪要</cite>
+          </div>
+
+          <h3>说法差异：商家自报产能与实地记录对不上</h3>
+          <p>抽 30 家注塑厂核对产能字段，商家自报月产能中位数 280 吨，实地查看设备铭牌与班次后，核算中位数 196 吨，偏差 30%。偏差原因集中在两点：把外协产能计入自有，以及按两班倒计算但实际只开一班。名录制保留“自报”标注，另设“实地核算”字段，两者并列显示，不做合并。</p>
+
+          <div class="table-scroll">
+            <table class="cmp">
+              <thead>
+                <tr><th>字段</th><th>自报口径</th><th>实地核算口径</th><th>差异处理</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>月产能</td><td>280 吨（含外协）</td><td>196 吨（自有设备）</td><td>两值并列，附核算日期</td></tr>
+                <tr><td>最小起订量</td><td>200 套</td><td>500 套（含开模摊销）</td><td>取较高值展示</td></tr>
+                <tr><td>打样周期</td><td>3 天</td><td>5—7 天</td><td>按批次注明区间</td></tr>
+                <tr><td>开票类型</td><td>13% 专票</td><td>多为 3% 普票</td><td>以营业执照副本为准</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>规则前后变化：核对从半年一次改为季度一次</h3>
+          <p>2025年名录按半年核对一次，2026年3月起改为季度核对，7月起在记录页强制显示最近核对日期。改动后，“待核验”记录占比从 18% 上升到 27%，看起来是数据变差，实际是披露更严。对比 2026年第二季度与第三季度，已核验记录数从 28,410 条降到 26,930 条，减少的部分主要是超期未复拨的条目转入待核验，而不是商家消失。</p>
+
+          <h3>争议点：要不要把评分放进名录</h3>
+          <p>有一种建议是给商家打综合评分，按分数排序。2026年9月的讨论中，反对方提出三条理由：评分样本来自平台用户，与采购批次绑定，复购率高的老客户会拉高分数；供应商规模差异大，5 人厂与 300 人厂用同一把尺子不合理；评分一旦公开，商家可能通过返现换好评。名录组目前的处理是只保留字段与核对日期，不设综合分，把判断权交回采购方。</p>
+          <p>这个做法也有代价。字段齐全的记录有 42,680 条，采购方要自己逐条比较，工作量大。折中方案正在测试：按行业给出 3—5 个关键字段的默认排序，比如注塑类默认按“实地核算产能”降序，纸箱类默认按“打样周期”升序，排序规则公开，可切换。</p>
+        </div>
+      </section>
+
+      <!-- 体验指南 -->
+      <section class="sec" id="guide">
+        <div class="sec-head">
+          <h2>体验指南：五步查到能用的号码</h2>
+          <span class="sub">从检索到拨号前的确认清单</span>
+        </div>
+        <ol class="steps">
+          <li><b>先选行业小类，别直接搜关键词。</b>搜“模具”会同时命中模具钢、模具配件与加工厂三类，选“五金模具加工厂”后记录数从 1,200 多条收敛到 128 条。</li>
+          <li><b>看核对日期，优先选 90 天内的记录。</b>记录页右上角有核对批次号，2026Q4 表示本季度已复拨，2026Q3 表示上季度。</li>
+          <li><b>打电话前先看开票类型。</b>同一品类里 13% 专票与 3% 普票混排，报价差 8—11 个点，先确认票种再谈价。</li>
+          <li><b>问清起订量与打样费。</b>纸箱类 500 只以下多数加收版费，模具类开模费是否摊进单价，各家口径不同，写在报价单上再确认。</li>
+          <li><b>成交前索取营业执照副本。</b>对照记录里的经营地址与经营范围，地址不一致的，要求提供分厂或仓库的租赁合同。</li>
+        </ol>
+      </section>
+
+      <!-- 对照面板 -->
+      <section class="sec" id="compare">
+        <div class="sec-head">
+          <h2>两类名录的使用差别</h2>
+          <span class="sub">制造供应商 vs 批发档口</span>
+        </div>
+        <div class="compare">
+          <div class="cmp-panel">
+            <h4>制造业供应商名录</h4>
+            <ul>
+              <li>字段：起订量、月产能、验厂报告版本、交期</li>
+              <li>适合：定制件、批量采购、长期协议</li>
+              <li>核对重点：设备铭牌与班次，实地核算产能</li>
+              <li>常见问题：外协产能计入自报数据</li>
+            </ul>
+          </div>
+          <div class="cmp-panel hot">
+            <h4>批发市场档口名录</h4>
+            <ul>
+              <li>字段：档口编号、主营品类、当日截单时间、物流线路</li>
+              <li>适合：现货补货、小批量试单、临时调货</li>
+              <li>核对重点：档口编号与市场分区图对应</li>
+              <li>常见问题：同一商户多档口、电话转接频繁</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="sec" id="faq">
+        <div class="sec-head">
+          <h2>常见问答</h2>
+          <span class="sub">关于核对、登记与纠错</span>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>名录里的商家电话多久核对一次？</summary>
+            <div class="ans">按季度批量核对。2026年10月26日完成第三轮，抽检 4,800 条，接通 3,955 条。单条记录标有最近核对日期，超过 180 天未复拨的卡片带灰色角标，采购前建议优先选 90 天内的记录。</div>
+          </details>
+          <details>
+            <summary>个体户没有营业执照可以登记商家名录吗？</summary>
+            <div class="ans">可以登记为“待核验”，展示经营范围与所在市场档口，不展示门头照片。采购方下单前需自行索取营业执照副本与开票信息，名录不提供履约担保。</div>
+          </details>
+          <details>
+            <summary>制造业供应商名录和批发市场名录有什么区别？</summary>
+            <div class="ans">前者按工厂资质、产能与验厂报告组织，字段含起订量与交期；后者按档口编号、主营品类与物流线路组织，字段含当日发货截单时间。两类记录的核对方式也不同，工厂看设备与班次，档口看编号与分区图。</div>
+          </details>
+          <details>
+            <summary>同一家企业在不同区县出现两条记录怎么办？</summary>
+            <div class="ans">多为分厂或仓库地址差异。11月2日合并了东莞长安与虎门的 37 组重复条目，保留主厂记录并附分仓链接。遇到重复可在条目下点“纠错”提交，核对组会在 3 个工作日内回复。</div>
+          </details>
+          <details>
+            <summary>电话号码被标记为停机怎么处理？</summary>
+            <div class="ans">在条目下方点“纠错”，选择停机或空号，系统 48 小时内重新拨打核实，核实通过后替换新号或下架，处理结果写入更新日志。10月27日临沂板材批发替换的 11 个停机号码即按此流程完成。</div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 用户评论 -->
+      <section class="sec" id="comments">
+        <div class="sec-head">
+          <h2>用户评论</h2>
+          <span class="sub">来自采购与招商岗位的实测反馈</span>
+        </div>
+        <div class="comments">
+          <div class="cmt">
+            <div class="ch"><span class="av">周</span><b>周振宇</b><span>· 11月6日 · 注塑件采购</span></div>
+            <p>按“实地核算产能”排序找了<em>宁波北仑那家 196 吨的厂</em>，报价比自报 280 吨的两家都实在，打样费 800 元，说清后摊进 5,000 件的单价里，比预想低。</p>
+          </div>
+          <div class="cmt">
+            <div class="ch"><span class="av">林</span><b>林曼</b><span>· 11月5日 · 餐饮开店筹备</span></div>
+            <p>档口编号能对上市场分区图这点挺好，<em>214 条餐饮设备记录</em>里挑了三家，两家当天能出货。吐槽一下：有家档口照片是旧的，到现场发现换了招牌，回来点了纠错。</p>
+          </div>
+          <div class="cmt">
+            <div class="ch"><span class="av">陈</span><b>陈立群</b><span>· 11月4日 · 物流调度</span></div>
+            <p>冷链那条线路字段细到四档温区，比打电话问省事。<em>成都线</em>标注的温区是 −18℃ 到 4℃，实际到仓问了确认一致。郑州线当时还没细分，11月4日更新后才补上。</p>
+          </div>
+          <div class="cmt">
+            <div class="ch"><span class="av">黄</span><b>黄晓敏</b><span>· 11月3日 · 纸箱采购</span></div>
+            <p>打样周期写 3 天的三家，实际只有一家能做到。另两家说要排产，5 到 7 天。<em>这个字段建议按区间标</em>，写单一数字容易误导。</p>
+          </div>
+          <div class="cmt">
+            <div class="ch"><span class="av">吴</span><b>吴海涛</b><span>· 11月1日 · 服装辅料批发</span></div>
+            <p>虎门合并之后清爽多了，之前搜“拉链”出来一堆同号不同址的。<em>37 组重复合并</em>这个处理值得说，分仓链接也保留了，找货没断。</p>
+          </div>
+          <div class="cmt">
+            <div class="ch"><span class="av">赵</span><b>赵子恒</b><span>· 10月31日 · 电子元器件</span></div>
+            <p>名录不错，但综合评分一直没上，字段太多要自己比。<em>132 条电子元器件分销</em>里翻到手软，希望能按“原厂授权”直接筛。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 相关资讯 -->
+      <section class="sec" id="news">
+        <div class="sec-head">
+          <h2>相关资讯</h2>
+          <span class="sub">名录口径与行业规则的变动</span>
+        </div>
+        <div class="news-grid">
+          <div class="news-item">
+            <b>核对周期从半年改季度</b>
+            <span>2026年3月起执行，7月起记录页强制显示核对日期，待核验占比升至 27%。</span>
+          </div>
+          <div class="news-item">
+            <b>冷链温区字段细分四档</b>
+            <span>郑州、成都两仓先行，11月4日完成 41 家复拨，温区按 −18℃ 以下、−18至0℃、0至4℃、常温分档。</span>
+          </div>
+          <div class="news-item">
+            <b>虎门服装辅料条目合并</b>
+            <span>37 组重复条目按电话尾号比对合并，主厂记录附分仓链接，4 条应商家要求下架。</span>
+          </div>
+          <div class="news-item">
+            <b>验厂报告加版本号</b>
+            <span>苏州电子代工类补充报告版本与有效期，有效期最晚至 2027年3月，过期报告标记失效。</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 榜单 / 时间线 -->
+      <section class="sec" id="ranking">
+        <div class="sec-head">
+          <h2>本季度核对完成榜与时间线</h2>
+          <span class="sub">按批次完成时间排序</span>
+        </div>
+        <div class="card">
+          <ol class="mini-rank" style="margin-bottom:16px">
+            <li><span>五金模具加工厂 · 128 条 · 10月26日完成</span></li>
+            <li><span>餐饮设备批发 · 214 条 · 11月3日完成</span></li>
+            <li><span>零担专线物流 · 163 条 · 11月5日完成</span></li>
+            <li><span>纸箱包装定制 · 86 条 · 10月30日完成</span></li>
+          </ol>
+          <ul class="timeline">
+            <li><time>2026年10月26日</time><b>第三轮抽检完成</b>抽检 4,800 条，接通 3,955 条，接通率 82.4%。</li>
+            <li><time>2026年10月30日</time><b>纸箱类补充打样字段</b>补录 86 家打样费与打样周期，按区间标注。</li>
+            <li><time>2026年11月2日</time><b>虎门重复条目合并</b>37 组合并，附分仓链接，4 条下架。</li>
+            <li><time>2026年11月5日</time><b>冷链与专线字段更新</b>成都、郑州两条线路补温区与车型说明。</li>
+            <li><time>2026年11月7日</time><b>本轮新增收录</b>制造与物流类新增 286 家核验商家。</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 相关推荐标签 -->
+      <section class="sec" id="tags">
+        <div class="sec-head">
+          <h2>相关推荐</h2>
+          <span class="sub">常被一起查询的长尾入口</span>
+        </div>
+        <div class="tag-index">
+          <a href="/#featured">东莞五金模具加工厂名录</a>
+          <a href="/#featured">注塑厂月产能怎么核对</a>
+          <a href="/#featured">纸箱起订量500只起做</a>
+          <a href="/#featured">华南到华中零担专线</a>
+          <a href="/#featured">冷链仓储温区划分</a>
+          <a href="/#featured">餐饮设备批发档口编号</a>
+          <a href="/#featured">虎门服装辅料档口</a>
+          <a href="/#featured">电子元器件原厂授权查询</a>
+          <a href="/#featured">临沂板材批发电话</a>
+          <a href="/#guide">营业执照副本怎么核对</a>
+        </div>
+      </section>
+
+      <!-- 补充板块：可信度分层 -->
+      <section class="sec" id="trust">
+        <div class="sec-head">
+          <h2>记录可信度分层说明</h2>
+          <span class="sub">三档状态对应不同核对动作</span>
+        </div>
+        <div class="card">
+          <p><span class="badge ok">已核验</span> 本季度内两次拨号接通，经营地址与营业执照地址一致，验厂报告在有效期内。适用场景：可直接进入报价与打样阶段。</p>
+          <p><span class="badge">待核验</span> 电话接通但地址未实地比对，或验厂报告已过期。适用场景：可先电话询价，成交前补营业执照副本。</p>
+          <p><span class="badge gray">暂停收录</span> 连续两季未接通，或商家主动要求下架。历史报价与厂址保留，电话不展示。</p>
+          <p style="margin-top:10px;font-size:13.8px;color:var(--muted)">分层每季度重算一次，最近一次为 2026年10月26日。分层结果不构成交易建议，仅反映核对状态。</p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- 侧栏 -->
+    <aside class="side-col" aria-label="辅助导航">
+      <div class="side-card">
+        <h3>栏目导航</h3>
+        <ul class="side-nav" id="sideNav">
+          <li><a href="/#overview">领域概览</a></li>
+          <li><a href="/#featured">精选内容推荐</a></li>
+          <li><a href="/#updates">最新更新</a></li>
+          <li><a href="/#cats">分类入口</a></li>
+          <li><a href="/#deep">深度解析</a></li>
+          <li><a href="/#guide">体验指南</a></li>
+          <li><a href="/#compare">两类名录对照</a></li>
+          <li><a href="/#faq">常见问答</a></li>
+          <li><a href="/#comments">用户评论</a></li>
+          <li><a href="/#news">相关资讯</a></li>
+          <li><a href="/#ranking">核对完成榜</a></li>
+          <li><a href="/#tags">相关推荐</a></li>
+          <li><a href="/#trust">可信度分层</a></li>
+        </ul>
+      </div>
+      <div class="side-card">
+        <h3>本季核对进度</h3>
+        <ol class="mini-rank">
+          <li>五金模具 128/128</li>
+          <li>餐饮设备 214/214</li>
+          <li>零担专线 163/163</li>
+          <li>纸箱包装 86/86</li>
+          <li>冷链仓储 47/52</li>
+        </ol>
+        <p class="side-note" style="margin-top:10px">冷链仓储尚有 5 家待复拨，预计 11月12日前完成。</p>
+      </div>
+      <div class="side-card">
+        <h3>登记与纠错</h3>
+        <p class="side-note">商家信息有误、电话停机、地址变更，均可在对应条目点击纠错。核对组工作时间为工作日 9:00—18:00，一般 3 个工作日内回复。</p>
+        <p style="margin:10px 0 0"><a href="/#trust" style="font-size:13.5px">查看可信度分层规则 →</a></p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="fb-name">黄页仓库入口</div>
+        <p>整理工厂、档口与专线的可用联系记录，字段对齐采购场景，核对日期公开可查。</p>
+      </div>
+      <div class="footer-cols">
+        <div>
+          <h4>行业频道</h4>
+          <ul>
+            <li><a href="/#featured">五金模具加工厂</a></li>
+            <li><a href="/#featured">注塑与吹塑代工</a></li>
+            <li><a href="/#featured">纸箱包装定制</a></li>
+            <li><a href="/#featured">电子元器件分销</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>物流仓储</h4>
+          <ul>
+            <li><a href="/#featured">零担专线物流</a></li>
+            <li><a href="/#featured">冷链仓储配送</a></li>
+            <li><a href="/#featured">工业设备租赁</a></li>
+            <li><a href="/#featured">板材与建材批发</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>帮助</h4>
+          <ul>
+            <li><a href="/#guide">核验指引</a></li>
+            <li><a href="/#faq">常见问答</a></li>
+            <li><a href="/#trust">可信度分层</a></li>
+            <li><a href="/#updates">更新日志</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="note">页面所列商家条目为示例数据，电话、产能与核对日期用于演示字段结构，实际登记以营业执照副本与实地核对结果为准。</span>
+      <span>© 2026 黄页仓库入口 · 内容更新至 2026年11月8日</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  var navToggle=document.getElementById('navToggle');
+  var mainNav=document.getElementById('mainNav');
+  if(navToggle&&mainNav){
+    navToggle.addEventListener('click',function(){
+      var open=mainNav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded',open?'true':'false');
+      navToggle.textContent=open?'收起':'菜单';
+    });
+    mainNav.addEventListener('click',function(e){
+      if(e.target.tagName==='A'&&window.innerWidth<=720){
+        mainNav.classList.remove('open');
+        navToggle.setAttribute('aria-expanded','false');
+        navToggle.textContent='菜单';
+      }
+    });
+  }
+
+  var form=document.getElementById('searchForm');
+  var input=document.getElementById('siteSearch');
+  var feedback=document.getElementById('searchFeedback');
+  var sections=Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+  var map=[];
+  sections.forEach(function(sec){
+    var title=sec.querySelector('h2');
+    var text=sec.textContent.replace(/\s+/g,' ');
+    map.push({id:sec.id,name:title?title.textContent:'',text:text});
+  });
+
+  if(form){
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      var q=input.value.trim();
+      if(!q){feedback.textContent='请输入行业、地区或商家名称后再查找。';feedback.classList.add('show');return;}
+      var hit=null;
+      for(var i=0;i<map.length;i++){
+        if(map[i].text.indexOf(q)>-1){hit=map[i];break;}
+      }
+      if(hit){
+        feedback.textContent='已定位到「'+hit.name+'」。';
+        feedback.style.color='var(--ok)';
+        feedback.classList.add('show');
+        var target=document.getElementById(hit.id);
+        if(target){target.scrollIntoView({behavior:'smooth',block:'start'});}
+      }else{
+        feedback.textContent='没有找到与「'+q+'」匹配的记录。可尝试行业名（如五金模具）、地区名（如东莞）或档口编号。';
+        feedback.style.color='var(--warn)';
+        feedback.classList.add('show');
+      }
+    });
+  }
+
+  var toTop=document.getElementById('toTop');
+  window.addEventListener('scroll',function(){
+    if(window.scrollY>500){toTop.classList.add('show');}else{toTop.classList.remove('show');}
+  },{passive:true});
+  toTop.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  var sideLinks=Array.prototype.slice.call(document.querySelectorAll('#sideNav a'));
+  if('IntersectionObserver' in window&&sideLinks.length){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var id=en.target.id;
+          sideLinks.forEach(function(a){
+            a.classList.toggle('active',a.getAttribute('href')==='/# '+id||a.getAttribute('href')==='#'+id||a.getAttribute('href').indexOf(id)>-1);
+          });
+        }
+      });
+    },{rootMargin:'-140px 0px -60% 0px',threshold:0});
+    sections.forEach(function(s){obs.observe(s);});
+  }
+})();
+</script>
+</body>
+  </html>
